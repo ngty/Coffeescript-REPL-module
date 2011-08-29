@@ -1,7 +1,6 @@
 package com.folone.replcoffeescript;
 
 import com.folone.Evaluator;
-
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.jcoffeescript.Option;
