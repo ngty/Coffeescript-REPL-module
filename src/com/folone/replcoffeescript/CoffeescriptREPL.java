@@ -15,37 +15,31 @@ import android.os.RemoteException;
 public class CoffeescriptREPL extends Service {
 
     private final Evaluator.Stub evaluator = new Evaluator.Stub() {
-        private JCoffeeScriptCompiler coffee;
+        private JCoffeeScriptCompiler compiler;
         private Context context;
         private Scriptable scope;
 
         public String evaluate(String script) throws RemoteException {
-          String result = "Something went wrong.";
-
           if (context == null) {
             context = Context.enter();
             scope = context.initStandardObjects();
-          };
-
-          try {
-              result = Context.toString(
-                  context.evaluateString(scope, compile(script), "<cmd>", 1, null)
-              );
-          } catch (Exception e) {
-              result = e.getMessage();
           }
 
-          return result;
+          try {
+            return Context.toString(context.evaluateString(scope, compile(script), "<cmd>", 1, null));
+          } catch (Exception e) {
+            return e.getMessage();
+          }
         }
 
         private String compile(String script) throws Exception {
-          if (coffee == null) {
+          if (compiler == null) {
             Collection<Option> options = new LinkedList<Option>();
             options.add(Option.BARE);
-            coffee = new JCoffeeScriptCompiler(options);
+            compiler = new JCoffeeScriptCompiler(options);
           }
 
-          return coffee.compile(script);
+          return compiler.compile(script);
         }
     };
 
